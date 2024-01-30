@@ -148,6 +148,10 @@ function drawHand(ctx, pos, length, width, ststyle) {
   ctx.strokeStyle = ststyle;
   ctx.stroke();
   ctx.rotate(-pos);
+  ctx.shadowOffsetX=0;
+  ctx.shadowOffsetY=5;
+  ctx.shadowBlur=5;    
+ ctx.shadowColor = "rgba(50,50,50, 0.8)";  
 }
 </script>
 </body>

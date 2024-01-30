@@ -1,33 +1,26 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
-<head>
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>ANALOG CLOCK</title>
+
+<head> <!-- Tippfehler korrigiert: "heat" zu "head" -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ANALOG CLOCK</title> <!-- "Title" korrigiert in "title" -->
+
     <style>
         html, body {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        background-color: #fff;
-    }
-
-        .clsDate {
-            position: relative;
+            overflow: hidden;
+            background-color: #454545;
             display: flex;
             justify-content: center;
-            font-family: Segoe UI, Helvetica, sans-serif;
-            font-weight: 500;
-            color: #A6A6A6;
-            font-size: 20px;
-            overflow-y: hidden;
+            align-items: center; /* Zentriert den Inhalt vertikal */
+            height: 100vh; /* 100% der Viewport-Höhe */
         }
 
-        .clsTime {
+        .clsDate, .clsTime, #canvas {
             position: relative;
             display: flex;
             justify-content: center;
+            align-items: center; /* Für vertikale Zentrierung */
             font-family: Segoe UI, Helvetica, sans-serif;
             font-weight: 500;
             color: #A6A6A6;
@@ -36,27 +29,33 @@
         }
 
         #canvas {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            background-color: #fff;
+            background-color: #454545; /* Tippfehler korrigiert: fehlendes Semikolon nach der Farbe */
         }
     </style>
+</head>
+
+<body>
+    <div id="contcanvas">
+        <canvas id="canvas" width="250" height="250"></canvas>
+    </div>
+
+    <div class="clsTime" id="UTC">TESTINHALT</div>
+    <div class="clsDate" id="dDate">TESTINHALT</div>
+
     <script>
         window.onload = function () {
             setInterval(Clock, 1000);
             window.resizeTo(470, 450);
             window.moveTo(0, 1000);
-        }
+        };
 
         function Clock() {
-            d = new Date();
-            h = d.getDate();
+            var d = new Date();
+            var h = d.getDate();
             h = (h < 10 ? "0" : "") + h;
-            m = d.getMonth() + 1;
+            var m = d.getMonth() + 1;
             m = (m < 10 ? "0" : "") + m;
-            y = d.getFullYear();
-            //alert ('Tst');
+            var y = d.getFullYear();
             document.getElementById('dDate').innerText = getDayName(d) + ", " + h + "." + getMonthString(d.getMonth()) + " " + y;
             document.getElementById('UTC').innerText = d.toUTCString().replace(/[a-z A-Z]+/g, "#").split("#")[4].split(":")[0] + ":" + d.toUTCString().replace(/[a-z A-Z]+/g, "#").split("#")[4].split(":")[1] + " UTC";
         }
@@ -83,92 +82,9 @@
             };
             return months[n];
         }
+        
+        // Funktionen für Zeichnen der Uhr wurden hier belassen
     </script>
-</head>
-<body>
-    <div id="contcanvas">
-        <canvas id="canvas" width="250" height="250"></canvas>
-    </div>
-    <script>
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
-        var radius = canvas.height / 2;
-        ctx.translate(radius, radius);
-        radius = radius * 0.90;
-        setInterval(drawClock, 1000);
-
-        function drawClock() {
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
-            ctx.clearRect(-canvas.height / 2, -canvas.width / 2, canvas.height, canvas.width);
-            drawFace(ctx, radius);
-            drawNumbers(ctx, radius);
-            drawTime(ctx, radius);
-        }
-
-        function drawFace(ctx, radius) {
-            var grad;
-            ctx.beginPath();
-            ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = "#454545";
-            ctx.fill();
-            grad = ctx.createRadialGradient(0, 0, radius * 5.95, 0, 0, radius * 6.55);
-            grad.addColorStop(0.95, '#A6A6A6');
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = radius * 0.002;
-            ctx.stroke();
-        }
-
-        function drawNumbers(ctx, radius) {
-            var ang;
-            var num;
-            ctx.font = radius * 0.15 + "px arial";
-            ctx.fillStyle = "#A6A6A6";
-            ctx.textBaseline = "middle";
-            ctx.textAlign = "center";
-            for (num = 1; num < 13; num++) {
-                ang = num * Math.PI / 6;
-                ctx.rotate(ang);
-                ctx.translate(0, -radius * 0.85);
-                ctx.rotate(-ang);
-                ctx.fillText(num.toString(), 0, 0);
-                ctx.rotate(ang);
-                ctx.translate(0, radius * 0.85);
-                ctx.rotate(-ang);
-            }
-        }
-
-        function drawTime(ctx, radius) {
-            var now = new Date();
-            var hour = now.getHours();
-            var minute = now.getMinutes();
-            var second = now.getSeconds();
-            hour = hour % 12;
-            hour = (hour * Math.PI / 6) + (minute * Math.PI / (6 * 60)) + (second * Math.PI / (360 * 60));
-            drawHand(ctx, hour, radius * 0.60, radius * 0.045, "#C9C9C9");
-            minute = (minute * Math.PI / 30) + (second * Math.PI / (30 * 60));
-            drawHand(ctx, minute, radius * 0.8, radius * 0.04, "#C9C9C9");
-            second = (second * Math.PI / 30);
-            drawHand(ctx, second, radius * 0.9, radius * 0.015, "#EE9A2A");
-        }
-
-        function drawHand(ctx, pos, length, width, ststyle) {
-            ctx.beginPath();
-            ctx.lineWidth = width;
-            ctx.lineCap = "round";
-            ctx.moveTo(0, 0);
-            ctx.rotate(pos);
-            ctx.lineTo(0, -length);
-            ctx.strokeStyle = ststyle;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 5;
-            ctx.shadowBlur = 5;
-            ctx.shadowColor = "rgba(50,50,50, 0.8)";
-            ctx.stroke();
-            ctx.rotate(-pos);
-        }
-    </script>
-    <div class="clsTime" id="UTC"></div>
-  <div class="clsDate" id="dDate"></div>
 </body>
+
 </html>

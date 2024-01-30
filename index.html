@@ -94,28 +94,31 @@ function drawClock() {
   drawFace(ctx, radius);
   drawNumbers(ctx, radius);
   drawTime(ctx, radius);
+  ctx.shadowColor = "transparent";
 }
 
 function drawFace(ctx, radius) {
   var grad;
   ctx.beginPath();
   ctx.arc(0, 0, radius, 0, 2*Math.PI);
-  ctx.fillStyle = "#1d2228";
+  ctx.fillStyle = "#fff";
   ctx.fill();
   grad = ctx.createRadialGradient(0, 0, radius*5.95, 0, 0, radius*6.55);
-  grad.addColorStop(0.95, '#A6A6A6');
+  grad.addColorStop(0.95, '#1d2228');
   ctx.strokeStyle = grad;
   ctx.lineWidth = radius*0.002;
   ctx.stroke();
+  ctx.shadowColor = "transparent";
 }
 
 function drawNumbers(ctx, radius) {
   var ang;
   var num;
   ctx.font = radius*0.15 + "px arial";
-  ctx.fillStyle = "#A6A6A6";
+  ctx.fillStyle = "#1d2228";
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
+  ctx.shadowColor = "transparent";
   for(num = 1; num < 13; num++){
     ang = num * Math.PI / 6;
     ctx.rotate(ang);
@@ -125,6 +128,7 @@ function drawNumbers(ctx, radius) {
     ctx.rotate(ang);
     ctx.translate(0, radius*0.85);
     ctx.rotate(-ang);
+	ctx.shadowColor = "transparent";
   }
 }
 
@@ -135,14 +139,22 @@ function drawTime(ctx, radius) {
   var second = now.getSeconds();   
   hour = hour%12;
   hour = (hour*Math.PI/6) + (minute*Math.PI/(6*60)) + (second*Math.PI/(360*60));
-  drawHand(ctx, hour, radius*0.60, radius*0.045, "#C9C9C9");
+  drawHand(ctx, hour, radius*0.60, radius*0.045, "#1d2228");
   minute = (minute*Math.PI/30) + (second*Math.PI/(30*60));
-  drawHand(ctx, minute, radius*0.8, radius*0.04, "#C9C9C9");
+  drawHand(ctx, minute, radius*0.8, radius*0.04, "#1d2228");
   second = second*Math.PI/30;
   drawHand(ctx, second, radius*0.9, radius*0.015, "#EE9A2A");
 }
 
-function drawHand(ctx, pos, length, width, ststyle) {		
+function drawHand(ctx, pos, length, width, ststyle) {        
+
+
+  // Setzt den Schatten für die Zeiger
+  ctx.shadowColor = "rgba(50, 50, 50, 0.8)";
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 5;
+  ctx.shadowBlur = 5;
+
   ctx.beginPath();
   ctx.lineWidth = width;
   ctx.lineCap = "round";
@@ -152,10 +164,6 @@ function drawHand(ctx, pos, length, width, ststyle) {
   ctx.strokeStyle = ststyle;
   ctx.stroke();
   ctx.rotate(-pos);
-  ctx.shadowOffsetX=0;
-  ctx.shadowOffsetY=5;
-  ctx.shadowBlur=5;    
- ctx.shadowColor = "rgba(50,50,50, 0.8)";  
 }
 </script>
 </body>

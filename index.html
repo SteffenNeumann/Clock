@@ -95,6 +95,10 @@ function drawClock() {
   drawNumbers(ctx, radius);
   drawTime(ctx, radius);
   ctx.shadowColor = "transparent";
+ /* ctx.shadowColor = "rgba(50, 50, 50, 0.25)";
+  ctx.shadowOffsetX = 4;
+  ctx.shadowOffsetY = 4;
+  ctx.shadowBlur = 14;*/
 }
 
 function drawFace(ctx, radius) {
@@ -104,11 +108,11 @@ function drawFace(ctx, radius) {
   ctx.fillStyle = "#fff";
   ctx.fill();
   grad = ctx.createRadialGradient(0, 0, radius*5.95, 0, 0, radius*6.55);
-  grad.addColorStop(0.95, '#1d2228');
+  grad.addColorStop(0.95, '#fff'); //#1d2228'
   ctx.strokeStyle = grad;
   ctx.lineWidth = radius*0.002;
   ctx.stroke();
-  ctx.shadowColor = "transparent";
+
 }
 
 function drawNumbers(ctx, radius) {
@@ -128,7 +132,7 @@ function drawNumbers(ctx, radius) {
     ctx.rotate(ang);
     ctx.translate(0, radius*0.85);
     ctx.rotate(-ang);
-	ctx.shadowColor = "transparent";
+	//ctx.shadowColor = "transparent";
   }
 }
 
